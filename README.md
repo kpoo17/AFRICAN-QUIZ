@@ -1,1 +1,124 @@
-# AFRICAN-QUIZ
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TogoQuiz</title>
+<style>
+:root{--bg:#fff8e7;--card:#fff;--tx:#1d2b1f;--g:#1f9d55;--y:#f5b800;--r:#d93636;--mut:#6b7a6e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10180f;--card:#1b271a;--tx:#f2f6ef;--mut:#9fb0a1}}
+:root[data-theme="dark"]{--bg:#10180f;--card:#1b271a;--tx:#f2f6ef;--mut:#9fb0a1}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:480px;margin:0 auto;padding:20px;text-align:center}
+h1{font-size:2.2rem;margin:.4em 0 .1em;color:var(--g)}
+p{color:var(--mut)}
+button{font:inherit;font-weight:700;border:0;border-radius:16px;padding:16px;width:100%;margin:8px 0;background:var(--g);color:#fff;font-size:1.05rem;cursor:pointer}
+button.alt{background:var(--card);color:var(--tx);border:2px solid var(--mut)}
+button.ok{background:var(--g)!important;color:#fff!important}
+button.ko{background:var(--r)!important;color:#fff!important}
+.top{display:flex;justify-content:space-between;font-weight:700;margin-bottom:10px}
+.bar{height:10px;background:var(--card);border-radius:9px;overflow:hidden;margin-bottom:16px}
+.bar i{display:block;height:100%;width:100%;background:var(--y);transition:width 1s linear}
+.q{background:var(--card);border-radius:18px;padding:20px;font-size:1.2rem;font-weight:700;margin-bottom:10px}
+.big{font-size:3.2rem;font-weight:800;color:var(--y)}
+.hide{display:none}
+</style>
+</head>
+<body>
+<main>
+<section id="home">
+<h1>🇹🇬 TogoQuiz</h1>
+<p>Combien de questions peux-tu réussir ? Défie tes amis !</p>
+<p id="best"></p>
+<button data-c="all">🎲 Tout mélanger</button>
+<button class="alt" data-c="Togo">🇹🇬 Togo</button>
+<button class="alt" data-c="Afrique">🌍 Afrique</button>
+<button class="alt" data-c="Football">⚽ Football</button>
+<button class="alt" data-c="Culture">🧠 Culture générale</button>
+</section>
+<section id="game" class="hide">
+<div class="top"><span id="lives"></span><span id="sc"></span><span id="tm"></span></div>
+<div class="bar"><i id="fill"></i></div>
+<div class="q" id="qt"></div>
+<div id="ans"></div>
+<p id="combo"></p>
+</section>
+<section id="end" class="hide">
+<h1 id="et"></h1>
+<div class="big" id="es"></div>
+<p id="em"></p>
+<button id="share">📲 Partager mon score sur WhatsApp</button>
+<button class="alt" id="again">🔁 Rejouer</button>
+</section>
+</main>
+<!-- Pub : colle ici le code de ta bannière AdSense quand ton site sera validé -->
+<script>
+var Q=[
+["Togo","Quelle est la capitale du Togo ?",["Kara","Lomé","Sokodé","Atakpamé"],1],
+["Togo","En quelle année le Togo est-il devenu indépendant ?",["1956","1960","1963","1975"],1],
+["Togo","Quel est le plus haut sommet du Togo ?",["Mont Agou","Mont Kenya","Mont Cameroun","Mont Nimba"],0],
+["Togo","Quelle monnaie utilise-t-on au Togo ?",["Cedi","Naira","Franc CFA","Dalasi"],2],
+["Togo","Quel pays est à l’ouest du Togo ?",["Bénin","Ghana","Niger","Nigeria"],1],
+["Afrique","Quel est le plus long fleuve d’Afrique ?",["Niger","Congo","Nil","Zambèze"],2],
+["Afrique","Quelle est la capitale du Nigeria ?",["Lagos","Abuja","Kano","Accra"],1],
+["Afrique","Quelle est la capitale officielle de la Côte d’Ivoire ?",["Abidjan","Bouaké","Yamoussoukro","San-Pédro"],2],
+["Afrique","Quel est le plus grand pays d’Afrique par la superficie ?",["Algérie","RD Congo","Soudan","Libye"],0],
+["Afrique","Quelle est la capitale du Burkina Faso ?",["Bobo-Dioulasso","Niamey","Bamako","Ouagadougou"],3],
+["Football","Qui a gagné la Coupe du monde 2022 ?",["France","Brésil","Argentine","Croatie"],2],
+["Football","Quel joueur togolais a joué à Arsenal et au Real Madrid ?",["Adebayor","Drogba","Eto’o","Salah"],0],
+["Football","Quel est le surnom de l’équipe du Togo ?",["Les Lions","Les Éperviers","Les Aigles","Les Étalons"],1],
+["Football","Combien de joueurs par équipe sur le terrain au football ?",["9","10","11","12"],2],
+["Football","Quel pays a gagné la CAN 2023 (jouée en 2024) ?",["Nigeria","Sénégal","Côte d’Ivoire","Égypte"],2],
+["Culture","Quelle planète est surnommée la planète rouge ?",["Vénus","Mars","Jupiter","Mercure"],1],
+["Culture","Quel est le plus grand océan du monde ?",["Atlantique","Indien","Arctique","Pacifique"],3],
+["Culture","Combien y a-t-il de continents ?",["5","6","7","8"],2],
+["Culture","Quelle est la formule chimique de l’eau ?",["CO2","H2O","O2","NaCl"],1],
+["Culture","Quel est le plus grand désert chaud du monde ?",["Kalahari","Gobi","Sahara","Namib"],2]
+];
+var $=function(i){return document.getElementById(i)};
+var pool,idx,score,lives,combo,t,iv,locked,cat,best=0;
+try{best=+localStorage.getItem("tq_best")||0}catch(e){}
+function show(id){["home","game","end"].forEach(function(s){$(s).classList.toggle("hide",s!==id)});}
+function home(){$("best").textContent=best?"🏆 Meilleur score : "+best:"";show("home");}
+function shuffle(a){return a.map(function(x){return[Math.random(),x]}).sort(function(a,b){return a[0]-b[0]}).map(function(x){return x[1]});}
+function start(c){cat=c;var p=Q.filter(function(q){return c==="all"||q[0]===c});pool=shuffle(p).slice(0,10);idx=0;score=0;lives=3;combo=0;show("game");next();}
+function next(){
+if(idx>=pool.length||lives<=0)return finish();
+var q=pool[idx];locked=false;t=15;
+$("qt").textContent=q[1];$("combo").textContent=combo>1?"🔥 Série x"+combo:"";
+var o=shuffle(q[2].map(function(x,i){return[x,i===q[3]]}));
+$("ans").innerHTML="";
+o.forEach(function(x){var b=document.createElement("button");b.className="alt";b.textContent=x[0];b.onclick=function(){pick(b,x[1])};$("ans").appendChild(b);});
+hud();clearInterval(iv);
+$("fill").style.transition="none";$("fill").style.width="100%";
+setTimeout(function(){$("fill").style.transition="width 1s linear"},30);
+iv=setInterval(function(){t--;hud();if(t<=0){clearInterval(iv);pick(null,false)}},1000);
+}
+function hud(){$("lives").textContent="❤️".repeat(Math.max(lives,0));$("sc").textContent="⭐ "+score;$("tm").textContent="⏱ "+Math.max(t,0);$("fill").style.width=Math.max(t,0)/15*100+"%";}
+function pick(b,right){
+if(locked)return;locked=true;clearInterval(iv);
+var btns=$("ans").children;
+if(right){combo++;score+=10+Math.min(combo-1,5)*2+t;b.className="ok";}
+else{combo=0;lives--;if(b)b.className="ko";var q=pool[idx];for(var i=0;i<btns.length;i++){if(btns[i].textContent===q[2][q[3]])btns[i].className="ok";}}
+try{if(navigator.vibrate)navigator.vibrate(right?20:120)}catch(e){}
+hud();idx++;setTimeout(next,1100);
+}
+function finish(){
+if(score>best){best=score;try{localStorage.setItem("tq_best",best)}catch(e){}}
+$("et").textContent=lives>0?"Bravo ! 🎉":"Perdu 😅";
+$("es").textContent=score+" pts";
+$("em").textContent="Meilleur score : "+best;
+show("end");
+}
+document.querySelectorAll("#home button").forEach(function(b){b.onclick=function(){start(b.dataset.c)}});
+$("again").onclick=home;
+$("share").onclick=function(){
+var m="J’ai fait "+score+" points sur TogoQuiz 🇹🇬 ! Tu peux me battre ? "+location.href.split("#")[0];
+if(navigator.share){navigator.share({text:m}).catch(function(){})}
+else{window.open("https://wa.me/?text="+encodeURIComponent(m),"_blank")}
+};
+home();
+</script>
+</body>
+</html>
